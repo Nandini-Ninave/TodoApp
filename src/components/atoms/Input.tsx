@@ -10,14 +10,18 @@ const Input = ({
     variant = "outlined",
     placeholder,
     sx,
+    name,
+    value,
     handleOnChange
 }: InputProps) => {
     return <>
         <TextField
+            name={name}
             margin={margin}
             autoFocus={autoFocus}
             required={required}
             id={id}
+            value={value}
             label={label}
             variant={variant}
             placeholder={placeholder}

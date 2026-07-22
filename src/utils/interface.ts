@@ -1,4 +1,5 @@
 import type { SxProps } from "@mui/material/styles";
+import type { Dayjs } from "dayjs";
 import type { ReactNode } from "react";
 
 export interface ButtonProps {
@@ -17,6 +18,8 @@ export interface InputProps{
     autoFocus?: boolean
     required?: boolean
     id?: string,
+    name?:string
+    value?:any
     label?: string,
     variant?: "outlined" | "filled" | "standard",
     placeholder:string,
@@ -24,7 +27,24 @@ export interface InputProps{
     handleOnChange:React.ChangeEventHandler<HTMLInputElement>
 }
 
-export interface DialogProps{
-    open:boolean,
-    handleClose:any
+export interface Todo {
+  id?: number;
+  title: string;
+  priority: string;
+  status: string;
+  dueDate: string;
+}
+
+export interface TodoForm {
+  id?: number;
+  title: string;
+  priority: string;
+  status: string;
+  dueDate: Dayjs | null;
+}
+
+export interface Dialog_Props {
+  open: boolean;
+  handleClose: () => void;
+  todo: Todo | null;
 }
