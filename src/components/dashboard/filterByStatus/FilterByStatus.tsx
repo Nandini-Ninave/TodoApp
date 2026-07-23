@@ -24,6 +24,7 @@ const FilterBystatus=({childToParent}:any)=>{
         const filteredByStatus = todo.filter((item)=>item.status.toLowerCase()===filterBystatus.toLowerCase())
         if(filteredByStatus){
             childToParent(filteredByStatus)
+            // setPage(0);
         }
     }, [filterBystatus])
 

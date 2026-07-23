@@ -10,6 +10,7 @@ import {
   InputAdornment,
   styled,
   tableCellClasses,
+  TablePagination,
 
 } from "@mui/material";
 import "./dashboard.css"
@@ -36,6 +37,8 @@ import { SnackbarProvider } from "notistack";
 const Dashboard = () => {
 
   const [open, setOpen] = useState(false)
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [todo, setTodo] = useState<Todo[]>([])
   const [searchInput, setsearchInput] = useState("")
@@ -48,6 +51,7 @@ const Dashboard = () => {
     setTodo(data)
     return data;
   };
+
   const {
     isLoading,
   } = useQuery<Todo[]>({
@@ -67,6 +71,41 @@ const Dashboard = () => {
     setSelectedTodo(todo)
     setOpen(true)
   }
+const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+const handleSort = () => {
+  const order = sortOrder === "asc" ? "desc" : "asc";
+  setSortOrder(order);
+
+  setTodo((prevTodo) =>
+    [...prevTodo].sort((a, b) => {
+      if (order === "asc") {
+        return (
+          new Date(a.dueDate).getTime() -
+          new Date(b.dueDate).getTime()
+        );
+      }
+
+      return (
+        new Date(b.dueDate).getTime() -
+        new Date(a.dueDate).getTime()
+      );
+    })
+  );
+};
+  const handleChangePage = (
+  _event: unknown,
+  newPage: number
+) => {
+  setPage(newPage);
+};
+
+const handleChangeRowsPerPage = (
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+};
 
   useEffect(() => {
     const time = setTimeout(() => {
@@ -138,6 +177,10 @@ const Dashboard = () => {
           }}
 
         />
+        <Button
+  label={sortOrder === "asc" ? "Latest First" : "Oldest First"}
+  handleOnClick={handleSort}
+/>
         <FilterBystatus childToParent={childToParentStatus} />
         <FilterByPriority priorityToDashboard={childToParentPriority} />
         <Button
@@ -157,6 +200,15 @@ const Dashboard = () => {
         todo={selectedTodo}
       />
       </SnackbarProvider>
+      {/* <TablePagination
+  component="div"
+  count={todo.length}
+  page={page}
+  rowsPerPage={rowsPerPage}
+  onPageChange={handleChangePage}
+  onRowsPerPageChange={handleChangeRowsPerPage}
+  rowsPerPageOptions={[5, 10, 25]}
+/> */}
       <TableContainer component={Paper} sx={{ mt: 3, ml: 26, width: '75%' }}>
         <Table>
           <TableHead>
@@ -169,7 +221,9 @@ const Dashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {todo.map((todo) => (
+            {todo
+  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  .map((todo) => (
               <StyledTableRow key={todo.id}>
                 <StyledTableCell>{todo.title.charAt(0).toUpperCase()+todo.title.slice(1)}</StyledTableCell>
 
@@ -207,6 +261,15 @@ const Dashboard = () => {
             ))}
           </TableBody>
         </Table>
+         <TablePagination
+    component="div"
+    count={todo.length}
+    page={page}
+    rowsPerPage={rowsPerPage}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    rowsPerPageOptions={[5, 10, 25]}
+  />
       </TableContainer>
     </>
   );

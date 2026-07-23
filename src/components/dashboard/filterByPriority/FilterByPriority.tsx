@@ -24,6 +24,7 @@ const FilterByPriority = ({ priorityToDashboard }: any) => {
         const filteredByStatus = todo.filter((item) => item.priority.toLowerCase() === filterByPriority.toLowerCase())
         if (filteredByStatus) {
             priorityToDashboard(filteredByStatus)
+            // setPage(0);
         }
     }, [filterByPriority])
 
