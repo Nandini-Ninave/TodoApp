@@ -11,7 +11,7 @@ const Drawer = styled(MuiDrawer)({
   width: drawerWidth,
   flexShrink: 0,
   boxSizing: 'border-box',
-  mt: 10,
+  mt: 2,
   [`& .${drawerClasses.paper}`]: {
     width: drawerWidth,
     boxSizing: 'border-box',
@@ -30,15 +30,6 @@ export default function Sidebar() {
       }}
     >
       <Box
-
-        sx={{
-          display: 'flex',
-          mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-          p: 1.5,
-        }}
-      >
-      </Box>
-      <Box
         sx={{
           overflow: 'auto',
           height: '100%',
@@ -51,7 +42,7 @@ export default function Sidebar() {
       <Stack
         direction="row"
         sx={{
-          p: 2,
+          p: 1,
           gap: 1,
           alignItems: 'center',
           borderTop: '1px solid',

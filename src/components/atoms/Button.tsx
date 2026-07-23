@@ -1,5 +1,5 @@
 import { Button as MUIButton } from "@mui/material"
-import type { ButtonProps } from "../../utils/interface"
+import type { ButtonProps } from "@utils/interface"
 
 const Button = ({
     variant = "outlined",
@@ -9,7 +9,8 @@ const Button = ({
     size,
     startIcon,
     endIcon,
-    label
+    label,
+    color
 }: ButtonProps) => {
     return <>
         <MUIButton
@@ -20,6 +21,7 @@ const Button = ({
             size={size}
             startIcon={startIcon}
             endIcon={endIcon}
+            color={color}
         > {label}</MUIButton >
     </>
 }

@@ -14,19 +14,15 @@ import {
 } from "@mui/material";
 
 import type { SelectChangeEvent } from "@mui/material/Select";
-
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import Input from "./Input";
 import Button from "./Button";
-
-import { add_todo, edit_todo } from "../../utils/url";
-import type { Dialog_Props, TodoForm } from "../../utils/interface";
-
+import { add_todo, edit_todo } from "@utils/url";
+import type { Dialog_Props, TodoForm } from "@utils/interface";
+import { SnackbarProvider, useSnackbar, type VariantType } from 'notistack';
 const initialState: TodoForm = {
   id: undefined,
   title: "",
@@ -37,6 +33,8 @@ const initialState: TodoForm = {
 
 const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
   const queryClient = useQueryClient();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [todoData, setTodoData] =
     useState<TodoForm>(initialState);
@@ -70,14 +68,14 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
   const handleSelectChange = (
     e: SelectChangeEvent
   ) => {
+    console.log(e.target.name, e.target.value)
     const { name, value } = e.target;
 
     setTodoData((prev) => ({
       ...prev,
       [name as string]: value,
-    }));
-  };
-
+    }))
+  }
   const addMutation = useMutation({
     mutationFn: async (data: any) => {
       const res = await axios.post(add_todo, data);
@@ -91,45 +89,45 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
 
       handleClose();
     },
-  });
+  })
 
   const updateMutation = useMutation({
-  mutationFn: async (data: any) => {
-    const res = await axios.put(
-      `${edit_todo}/${data.id}`,
-      data
-    );
-    return res.data;
-  },
-  onSuccess: () => {
+    mutationFn: async (data: any) => {
+      const res = await axios.put(
+        `${edit_todo}/${data.id}`,
+        data
+      );
+      return res.data;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });
 
       handleClose();
     },
-});
+  });
 
   const handleSubmit = () => {
-     const task = {
-    id: todoData.id,
-    title: todoData.title,
-    priority: todoData.priority,
-    status: todoData.status,
-    dueDate: todoData.dueDate
-      ? todoData.dueDate.format("YYYY-MM-DD")
-      : "",
-  };
+    const task = {
+      id: todoData.id,
+      title: todoData.title,
+      priority: todoData.priority,
+      status: todoData.status,
+      dueDate: todoData.dueDate
+        ? todoData.dueDate.format("YYYY-MM-DD")
+        : "",
+    };
 
-  console.log(task);
+    console.log(task);
 
-  if (todoData.id) {
-    console.log("Updating");
-    updateMutation.mutate(task);
-  } else {
-    console.log("Adding");
-    addMutation.mutate(task);
-  }
+    if (todoData.id) {
+      console.log("Updating");
+      updateMutation.mutate(task);
+    } else {
+      console.log("Adding");
+      addMutation.mutate(task);
+    }
   };
 
   return (
@@ -138,8 +136,8 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
         <DialogMUI
           open={open}
           onClose={handleClose}
-          fullWidth
-          maxWidth="sm"
+          // fullWidth
+          maxWidth="lg"
         >
           <DialogTitle>
             {todoData.id ? "Edit Todo" : "Add Todo"}
@@ -162,6 +160,7 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
               required
             />
 
+
             <FormControl fullWidth>
               <InputLabel>Priority</InputLabel>
 
@@ -171,11 +170,12 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
                 value={todoData.priority}
                 onChange={handleSelectChange}
               >
-                <MenuItem value="Low">Low</MenuItem>
+                <MenuItem value="Low" >Low</MenuItem>
                 <MenuItem value="Medium">Medium</MenuItem>
                 <MenuItem value="High">High</MenuItem>
               </Select>
             </FormControl>
+
 
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
@@ -186,13 +186,9 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
                 value={todoData.status}
                 onChange={handleSelectChange}
               >
-                <MenuItem value="Completed">
-                  Completed
-                </MenuItem>
-
-                <MenuItem value="In Progress">
-                  In Progress
-                </MenuItem>
+                <MenuItem value="Completed" >Completed</MenuItem>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
               </Select>
             </FormControl>
 
@@ -219,15 +215,21 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
               variant="outlined"
               handleOnClick={handleClose}
             />
-
+             <SnackbarProvider />
             <Button
+              disabled={(todoData.title).length === 0 ||
+                (todoData.priority).length === 0 ||
+                (todoData.status).length === 0
+              }
               label={
                 todoData.id
                   ? "Update Task"
                   : "Add Task"
               }
               variant="contained"
-              handleOnClick={handleSubmit}
+              handleOnClick={()=>{
+                {todoData.id?enqueueSnackbar('Task Updated'):enqueueSnackbar('Task Added')}
+              handleSubmit();}}
             />
           </DialogActions>
         </DialogMUI>
@@ -236,4 +238,5 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
   );
 };
 
-export default Dialog;
+export default Dialog
+

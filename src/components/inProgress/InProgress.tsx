@@ -4,10 +4,9 @@ import { get_todo } from "@utils/url";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Todo } from "@utils/interface";
-import { Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from "@mui/material";
-import { styled } from '@mui/material/styles';
-
-const Today = () => {
+import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from "@mui/material";
+import "./inProgress.css"
+const InProgress = () => {
     const [todo, setTodo] = useState<Todo[]>([])
     const [filtered, setFiltered] = useState<Todo[]>([])
     const apicall = async () => {
@@ -19,11 +18,8 @@ const Today = () => {
         queryKey: ["todos"],
         queryFn: apicall
     })
-    const date = new Date(Date.now())
-
     useEffect(() => {
-        const filteredByToday = todo.filter((item) => ((String(item.createdAt).slice(8, 10)) == (String(date).slice(8, 10))))
-        console.log(filteredByToday)
+        const filteredByToday = todo.filter((item) => (item.status == "In Progress"))
         setFiltered(filteredByToday)
     }, [todo])
 
@@ -45,32 +41,35 @@ const Today = () => {
         '&:last-child td, &:last-child th': {
             border: 0,
         },
-    }));
+    }))
+
     return (
         <div>
             <Sidebar />
-            <h2 className="heading">Today</h2>
+            <h2 className="heading">In Progress</h2>
+
             <TableContainer component={Paper} sx={{ mt: 3, ml: 26, width: '75%' }}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <StyledTableCell>Title</StyledTableCell>
-                            <StyledTableCell align="right">Priority</StyledTableCell>
-                            <StyledTableCell align="right">Status</StyledTableCell>
-                            <StyledTableCell align="right">Due Date</StyledTableCell>
-                            
+                            <StyledTableCell>Priority</StyledTableCell>
+                            <StyledTableCell>Status</StyledTableCell>
+                            <StyledTableCell>Due Date</StyledTableCell>
+                            {/* <TableCell align="center">Actions</TableCell> */}
                         </TableRow>
                     </TableHead>
 
                     <TableBody>
                         {filtered.map((todo) => (
                             <StyledTableRow key={todo.id}>
-                                <StyledTableCell component="th" scope="row">
-                                    {todo.title}
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{todo.priority}</StyledTableCell>
-                                <StyledTableCell align="right">{todo.status}</StyledTableCell>
-                                <StyledTableCell align="right">{todo.dueDate}</StyledTableCell>
+                                <StyledTableCell>{todo.title}</StyledTableCell>
+
+                                <StyledTableCell>{todo.priority}</StyledTableCell>
+
+                                <StyledTableCell>{todo.status}</StyledTableCell>
+
+                                <StyledTableCell>{todo.dueDate}</StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
@@ -80,4 +79,4 @@ const Today = () => {
         </div>
     )
 }
-export default Today
+export default InProgress

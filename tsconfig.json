@@ -3,5 +3,17 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler", 
+    "paths": {
+      "@utils/*": ["./src/utils/*"],
+      "@atoms/*": ["./src/components/atoms/*"],
+      // "@reduxToolkit/*": ["./src/components/reduxToolkit/*"],
+      // "@reusableComponents/*": ["./src/reusableComponents/*"],
+      // "@constant": ["./src/constant"],
+    }
+  }
+
 }
