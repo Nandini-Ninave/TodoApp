@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Todo } from "@utils/interface";
 import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from "@mui/material";
+import "./completed.css"
 const Completed = () => {
     const [todo, setTodo] = useState<Todo[]>([])
     const [filtered, setFiltered] = useState<Todo[]>([])
@@ -46,7 +47,7 @@ const Completed = () => {
     return (
         <div>
             <Sidebar />
-            <h2 style={{ marginTop: '10px', marginLeft: '80px' }}>Completed</h2>
+            <h2 className="heading">Completed</h2>
             <TableContainer component={Paper} sx={{ mt: 3, ml: 26, width: '75%' }}>
                 <Table>
                     <TableHead>

@@ -40,7 +40,7 @@ const Dialog = ({ open, handleClose, todo }: Dialog_Props) => {
     useState<TodoForm>(initialState);
 
   useEffect(() => {
-    console.log(todo)
+    // console.log(todo)
     if (todo) {
       setTodoData({
         id: todo.id,

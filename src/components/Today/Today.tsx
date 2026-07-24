@@ -63,7 +63,7 @@ const Today = () => {
                     </TableHead>
 
                     <TableBody>
-                        {filtered.map((todo) => (
+                        {filtered.length>0? filtered.map((todo) => (
                             <StyledTableRow key={todo.id}>
                                 <StyledTableCell component="th" scope="row">
                                     {todo.title}
@@ -72,7 +72,12 @@ const Today = () => {
                                 <StyledTableCell align="right">{todo.status}</StyledTableCell>
                                 <StyledTableCell align="right">{todo.dueDate}</StyledTableCell>
                             </StyledTableRow>
-                        ))}
+                        )):<h3>No todos</h3>}
+
+
+
+
+                       
                     </TableBody>
                 </Table>
             </TableContainer>

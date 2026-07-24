@@ -24,7 +24,6 @@ const FilterBystatus=({childToParent}:any)=>{
         const filteredByStatus = todo.filter((item)=>item.status.toLowerCase()===filterBystatus.toLowerCase())
         if(filteredByStatus){
             childToParent(filteredByStatus)
-            // setPage(0);
         }
     }, [filterBystatus])
 
@@ -41,7 +40,15 @@ const FilterBystatus=({childToParent}:any)=>{
           label2="In progress"
           label3="Pending"
           handleOnChange={handleFilterByStatus}
-          sx={{width:240, ml:2, height:10}}/>
+          sx={{width:350, ml:2, height:10,
+            '& .MuiSelect-select': {
+                paddingTop: '6px',
+                paddingBottom: '6px',
+                },
+                '& .MuiInputLabel-root': {
+                fontSize: '0.85rem',
+                }
+          }}/>
     )
 }
 export default FilterBystatus

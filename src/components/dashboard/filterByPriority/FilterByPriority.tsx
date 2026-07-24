@@ -24,9 +24,8 @@ const FilterByPriority = ({ priorityToDashboard }: any) => {
         const filteredByStatus = todo.filter((item) => item.priority.toLowerCase() === filterByPriority.toLowerCase())
         if (filteredByStatus) {
             priorityToDashboard(filteredByStatus)
-            // setPage(0);
         }
-    }, [filterByPriority])
+    }, [filterByPriority, todo])
 
     const handleFilterByPriority = (e: SelectChangeEvent) => {
         setFilterByPriority(e.target.value)
@@ -41,7 +40,17 @@ const FilterByPriority = ({ priorityToDashboard }: any) => {
             label2="High"
             label3="Low"
             handleOnChange={handleFilterByPriority}
-            sx={{ width: 250, ml: 2, height: 10 }} />
+            sx={{ width: 350, ml: 2, height: 10, padding:0, 
+                // Target the inner input padding safely without breaking the container height
+                '& .MuiSelect-select': {
+                paddingTop: '6px',
+                paddingBottom: '6px',
+                },
+                // Optional: Reduce label font size to fit the smaller height
+                '& .MuiInputLabel-root': {
+                fontSize: '0.85rem',
+                }
+            }} />
     )
 }
 export default FilterByPriority

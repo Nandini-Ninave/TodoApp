@@ -1,9 +1,8 @@
-import { styled } from '@mui/material/styles';
+import {  styled } from '@mui/material/styles';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import MenuContent from './MenuContent';
-
 
 const drawerWidth = 200;
 
@@ -18,7 +17,7 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export default function Sidebar() {
+function Sidebar() {
   return (
     <Drawer
       variant="permanent"
@@ -31,25 +30,39 @@ export default function Sidebar() {
     >
       <Box
         sx={{
+          p:2,
           overflow: 'auto',
-          height: '100%',
+          height: '150%',
           display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
           flexDirection: 'column',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          color:'black',
+          background:'lightgrey'
         }}
       >
-        <MenuContent />
+       <MenuContent />
       </Box>
+       
       <Stack
         direction="row"
         sx={{
-          p: 1,
-          gap: 1,
+          p: 2,
+          gap: 1.5,
           alignItems: 'center',
           borderTop: '1px solid',
           borderColor: 'divider',
+          bgcolor: 'background.default',
+
         }}
       >
       </Stack>
+      
     </Drawer>
+
   );
 }
+
+export default Sidebar
